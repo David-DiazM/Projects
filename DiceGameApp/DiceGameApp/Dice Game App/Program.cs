@@ -17,6 +17,7 @@
                 Console.WriteLine("Press any key to roll the dice.");
 
                 Console.ReadKey();
+                Console.WriteLine();
 
                 playerRandomNum = random.Next(1, 7);
                 Console.WriteLine("You rolled a " + playerRandomNum);
