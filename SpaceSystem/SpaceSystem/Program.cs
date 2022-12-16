@@ -61,7 +61,7 @@ namespace SpaceSystem
         {
             //checking user input
             //-------------------------------------------------------------------------------------------
-            var input = Console.ReadLine();
+            string? input = Console.ReadLine();
             //making sure input is not empty and if it is have them reenter in input
             //-------------------------------------------------------------------------------------------
             while (input == string.Empty)
