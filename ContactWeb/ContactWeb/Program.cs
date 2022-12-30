@@ -1,3 +1,4 @@
+using ContactManagerData;
 using ContactWeb.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,9 @@ namespace ContactWeb
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+            var cmdContext = builder.Configuration.GetConnectionString("ContactManager") ?? throw new InvalidOperationException("Connection string 'ContactManager' not found.");
+            builder.Services.AddDbContext<ContactManagerDbContext>(options =>
+                options.UseSqlServer(cmdContext));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)

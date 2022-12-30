@@ -27,7 +27,7 @@ namespace ContactManagerData
             var builder = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
                             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            _configuration= builder.Build();
+            _configuration = builder.Build();
             var cnstr = _configuration.GetConnectionString("ContactManager");
             optionsBuilder.UseSqlServer(cnstr);
         }
