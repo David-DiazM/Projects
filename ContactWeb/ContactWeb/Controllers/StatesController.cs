@@ -7,23 +7,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContactManagerData;
 using ContactWebModels;
+using Microsoft.Extensions.Caching.Memory;
+using ContactWeb.Models;
 
 namespace ContactWeb.Controllers
 {
     public class StatesController : Controller
     {
         private readonly ContactManagerDbContext _context;
+        private IMemoryCache _cache;
 
-        public StatesController(ContactManagerDbContext context)
+        public StatesController(ContactManagerDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         // GET: States
         public async Task<IActionResult> Index()
         {
+            var allStates = new List<State>();
+            if (!_cache.TryGetValue(ContactCacheConstants.ALL_STATES, out allStates))
+            {
+                var allStatesData = await _context.States.ToListAsync();
+
+                _cache.Set(ContactCacheConstants.ALL_STATES, allStatesData, TimeSpan.FromDays(1));
+                return View(allStatesData);
+            }
               return _context.States != null ? 
-                          View(await _context.States.ToListAsync()) :
+                          View(allStates) :
                           Problem("Entity set 'ContactManagerDbContext.States'  is null.");
         }
 
@@ -62,6 +74,7 @@ namespace ContactWeb.Controllers
             {
                 _context.Add(state);
                 await _context.SaveChangesAsync();
+                _cache.Remove(ContactCacheConstants.ALL_STATES);
                 return RedirectToAction(nameof(Index));
             }
             return View(state);
@@ -101,6 +114,7 @@ namespace ContactWeb.Controllers
                 {
                     _context.Update(state);
                     await _context.SaveChangesAsync();
+                    _cache.Remove(ContactCacheConstants.ALL_STATES);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,6 +166,7 @@ namespace ContactWeb.Controllers
             }
             
             await _context.SaveChangesAsync();
+            _cache.Remove(ContactCacheConstants.ALL_STATES);
             return RedirectToAction(nameof(Index));
         }
 
