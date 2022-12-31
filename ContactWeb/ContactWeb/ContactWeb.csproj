@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ContactManagerData\ContactManagerData.csproj" />
+    <ProjectReference Include="..\ContactManagerServices\ContactManagerServices.csproj" />
   </ItemGroup>
 
 </Project>

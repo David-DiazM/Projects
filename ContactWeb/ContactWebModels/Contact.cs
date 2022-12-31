@@ -35,6 +35,9 @@ namespace ContactWebModels
         [Phone(ErrorMessage = "Invalid Phone number")]
         public string PhoneSecondary { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime Birthday { get; set; }
+
         [Display(Name = "Street Address Line 1")]
         [StringLength(ContactManagerConstants.MAX_STREET_ADDRESS_LENGTH)]
         public string StreetAddress1 { get; set; }

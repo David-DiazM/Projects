@@ -1,54 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContactManagerData;
 using ContactWebModels;
 using Microsoft.Extensions.Caching.Memory;
 using ContactWeb.Models;
+using ContactManagerServices;
+using Newtonsoft.Json;
 
 namespace ContactWeb.Controllers
 {
     public class StatesController : Controller
     {
-        private readonly ContactManagerDbContext _context;
-        private IMemoryCache _cache;
+        private readonly IMemoryCache _cache;
+        private IStatesService _statesService;
 
-        public StatesController(ContactManagerDbContext context, IMemoryCache cache)
+        //public StatesController(MyContactManagerDbContext context, IMemoryCache cache)
+        public StatesController(IStatesService statesService, IMemoryCache cache)
+
         {
-            _context = context;
+            _statesService = statesService;
             _cache = cache;
         }
 
         // GET: States
         public async Task<IActionResult> Index()
         {
-            var allStates = new List<State>();
-            if (!_cache.TryGetValue(ContactCacheConstants.ALL_STATES, out allStates))
-            {
-                var allStatesData = await _context.States.ToListAsync();
+            //List<State> states = await GetStatesFromSession();
+            var states = await GetStatesFromCache();
+            return View(states);
+        }
 
-                _cache.Set(ContactCacheConstants.ALL_STATES, allStatesData, TimeSpan.FromDays(1));
-                return View(allStatesData);
+        private async Task<List<State>> GetStatesFromSession()
+        {
+            var session = HttpContext.Session;
+            var statesData = session.GetString(ContactCacheConstants.ALL_STATES_DATA_SESSION);
+            if (!string.IsNullOrWhiteSpace(statesData))
+            {
+                return JsonConvert.DeserializeObject<List<State>>(statesData);
             }
-              return _context.States != null ? 
-                          View(allStates) :
-                          Problem("Entity set 'ContactManagerDbContext.States'  is null.");
+
+            var states = await _statesService.GetAllAsync();
+            session.SetString("StatesData", JsonConvert.SerializeObject(states));
+            return states;
+        }
+
+        private async Task<List<State>> GetStatesFromCache()
+        {
+            var states = new List<State>();
+            if (!_cache.TryGetValue(ContactCacheConstants.ALL_STATES_DATA, out states))
+            {
+                var allStatesData = await _statesService.GetAllAsync();
+
+                _cache.Set(ContactCacheConstants.ALL_STATES_DATA, allStatesData, TimeSpan.FromDays(1));
+                return allStatesData;
+            }
+            return states;
         }
 
         // GET: States/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.States == null)
+            if (id == null || await _statesService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var state = await _context.States
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var state = await _statesService.GetAsync((int)id);
             if (state == null)
             {
                 return NotFound();
@@ -72,9 +89,8 @@ namespace ContactWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(state);
-                await _context.SaveChangesAsync();
-                _cache.Remove(ContactCacheConstants.ALL_STATES);
+                await _statesService.AddOrUpdateAsync(state);
+                _cache.Remove(ContactCacheConstants.ALL_STATES_DATA);
                 return RedirectToAction(nameof(Index));
             }
             return View(state);
@@ -83,12 +99,12 @@ namespace ContactWeb.Controllers
         // GET: States/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.States == null)
+            if (id == null || await _statesService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var state = await _context.States.FindAsync(id);
+            var state = await _statesService.GetAsync((int)id);
             if (state == null)
             {
                 return NotFound();
@@ -112,9 +128,8 @@ namespace ContactWeb.Controllers
             {
                 try
                 {
-                    _context.Update(state);
-                    await _context.SaveChangesAsync();
-                    _cache.Remove(ContactCacheConstants.ALL_STATES);
+                    await _statesService.AddOrUpdateAsync(state);
+                    _cache.Remove(ContactCacheConstants.ALL_STATES_DATA);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,13 +150,12 @@ namespace ContactWeb.Controllers
         // GET: States/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.States == null)
+            if (id == null || await _statesService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var state = await _context.States
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var state = await _statesService.GetAsync((int)id);
             if (state == null)
             {
                 return NotFound();
@@ -155,24 +169,25 @@ namespace ContactWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.States == null)
+            if (await _statesService.GetAllAsync() == null)
             {
-                return Problem("Entity set 'ContactManagerDbContext.States'  is null.");
+                return Problem("Entity set 'MyContactManagerDbContext.States'  is null.");
             }
-            var state = await _context.States.FindAsync(id);
-            if (state != null)
-            {
-                _context.States.Remove(state);
-            }
-            
-            await _context.SaveChangesAsync();
-            _cache.Remove(ContactCacheConstants.ALL_STATES);
+            await _statesService.DeleteAsync(id);
+
+            //var state = await _statesService.GetAsync(id);
+            //if (state != null)
+            //{
+            //    await _statesService.DeleteAsync(id);
+            //}
+
+            _cache.Remove(ContactCacheConstants.ALL_STATES_DATA);
             return RedirectToAction(nameof(Index));
         }
 
         private bool StateExists(int id)
         {
-          return (_context.States?.Any(e => e.Id == id)).GetValueOrDefault();
+            return Task.Run(async () => await _statesService.ExistsAsync(id)).Result;
         }
     }
 }

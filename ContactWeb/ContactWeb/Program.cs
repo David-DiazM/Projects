@@ -1,4 +1,6 @@
 using ContactManagerData;
+using ContactManagerRepositories;
+using ContactManagerServices;
 using ContactWeb.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +25,11 @@ namespace ContactWeb
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IStatesService, StatesService>();
+            builder.Services.AddScoped<IStatesRepository, StatesRepository>();
+            builder.Services.AddScoped<IContactsService, ContactsService>();
+            builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
 
             var app = builder.Build();
 
