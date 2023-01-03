@@ -11,9 +11,11 @@ using ContactWeb.Models;
 using Microsoft.Extensions.Caching.Memory;
 using ContactManagerServices;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContactWeb.Controllers
 {
+    [Authorize]
     public class ContactsController : Controller
     {
         private readonly IContactsService _contactsService;
@@ -43,7 +45,6 @@ namespace ContactWeb.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return userId;
         }
-
 
         // GET: Contacts
         public async Task<IActionResult> Index()

@@ -6,9 +6,12 @@ using Microsoft.Extensions.Caching.Memory;
 using ContactWeb.Models;
 using ContactManagerServices;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using ContactWeb.Data;
 
 namespace ContactWeb.Controllers
 {
+    [Authorize(Roles = UserRolesService.ADMIN_ROLE_NAME)]
     public class StatesController : Controller
     {
         private readonly IMemoryCache _cache;
