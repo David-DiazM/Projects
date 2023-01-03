@@ -23,4 +23,8 @@
     <ProjectReference Include="..\ContactManagerServices\ContactManagerServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\lib\datatables\" />
+  </ItemGroup>
+
 </Project>
