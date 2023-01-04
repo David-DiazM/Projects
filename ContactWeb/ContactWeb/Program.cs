@@ -22,6 +22,23 @@ namespace ContactWeb
                 options.UseSqlServer(cmdContext));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlServer(connectionString)
+                .Options;
+            using (var context = new ApplicationDbContext(contextOptions))
+            {
+                context.Database.Migrate();
+            }
+
+            var contextOptions2 = new DbContextOptionsBuilder<ContactManagerDbContext>()
+                .UseSqlServer(cmdContext)
+                .Options;
+            using (var context = new ContactManagerDbContext(contextOptions2))
+            {
+                context.Database.Migrate();
+            }
+
+
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
