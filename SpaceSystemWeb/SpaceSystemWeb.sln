@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWeb", "SpaceSystemWeb\SpaceSystemWeb.csproj", "{79E1DD2A-36E9-48F5-B7F6-7FFBDC7AD9AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWebModels", "..\..\Projects\SpaceSystem\SpaceSystemModels\SpaceSystemWebModels.csproj", "{06A2FEB9-C4DC-45FF-BB8B-36E6B1A8A174}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79E1DD2A-36E9-48F5-B7F6-7FFBDC7AD9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79E1DD2A-36E9-48F5-B7F6-7FFBDC7AD9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79E1DD2A-36E9-48F5-B7F6-7FFBDC7AD9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79E1DD2A-36E9-48F5-B7F6-7FFBDC7AD9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06A2FEB9-C4DC-45FF-BB8B-36E6B1A8A174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06A2FEB9-C4DC-45FF-BB8B-36E6B1A8A174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06A2FEB9-C4DC-45FF-BB8B-36E6B1A8A174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06A2FEB9-C4DC-45FF-BB8B-36E6B1A8A174}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {74171EC2-47CE-4D62-A56B-07F1C1566F0F}
+	EndGlobalSection
+EndGlobal
