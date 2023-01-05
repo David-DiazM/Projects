@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpaceSystemWeb.Data;
+using SpaceSystemWebData;
 
 namespace SpaceSystemWeb
 {
@@ -14,6 +15,10 @@ namespace SpaceSystemWeb
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            var sswdContext = builder.Configuration.GetConnectionString("SpaceSystem") ?? throw new InvalidOperationException("Connection string 'SpaceSystem' not found.");
+            builder.Services.AddDbContext<SpaceSystemWebDbContext>(options =>
+                options.UseSqlServer(sswdContext));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
