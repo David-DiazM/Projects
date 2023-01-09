@@ -1,4 +1,5 @@
 ﻿using SpaceSystemWebModels;
+using SpaceSystemWebRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,34 +10,53 @@ namespace SpaceSystemWebServices
 {
     public class StarsService : IStarsService
     {
-        public Task<int> AddOrUpdateAsync(Star s)
+        private IStarsRepository _starsRepository;
+
+        public StarsService(IStarsRepository starsRepository)
         {
-            throw new NotImplementedException();
+            _starsRepository = starsRepository;
         }
 
-        public Task<int> DeleteAsync(int id)
+        public async Task<List<Star>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var data = await _starsRepository.GetAllAsync();
+            return data;
         }
 
-        public Task<int> DeleteAsync(Star s)
+        public async Task<Star> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _starsRepository.GetAsync(id);
         }
 
-        public Task<bool> ExistsAsync(int id)
+        public async Task<int> AddOrUpdateAsync(Star s)
         {
-            throw new NotImplementedException();
+            return await _starsRepository.AddOrUpdateAsync(s);
         }
 
-        public Task<List<Star>> GetAllAsync()
+        public async Task<int> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _starsRepository.DeleteAsync(id);
         }
 
-        public Task<Star> GetAsync(int id)
+        public async Task<int> DeleteAsync(Star s)
         {
-            throw new NotImplementedException();
+            return await _starsRepository.DeleteAsync(s);
+        }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _starsRepository.ExistsAsync(id);
+        }
+
+        public async Task<List<Star>> GetAllCustomerAsync()
+        {
+            var data = await _starsRepository.GetAllAsync();
+            return data;
+        }
+
+        public async Task<Star> GetCustomerAsync(int id)
+        {
+            return await _starsRepository.GetAsync(id);
         }
     }
 }

@@ -9,51 +9,92 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.BoughtId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Temperature)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brightness)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.BoughtId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Temperature)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brightness)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CustomerId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-6 mb-4">
+            <div class="card" style="width: 18rem;">
+                <img src="~/images/@item.Name.ToLower()1.jpg" class="card-img-top" alt="Image of @item.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">
+                        <ul style="list-style: none">
+                            <li>Brightness: @item.Brightness</li>
+                            <li>Temperature: @item.Temperature</li>
+                        </ul>
+                    </p>
+                    <div>
+                        <a class="btn btn-primary btn-sm button-default-sm-width" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        @*<a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                        <a class="btn btn-secondary btn-sm button-default-sm-width" href="#" data-bs-toggle="modal" data-bs-target="#starsDetailsModal"
+                            data-bs-name="@item.Name" data-bs-temperature="@item.Temperature" data-bs-brightness="@item.Brightness">Details</a>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm button-default-sm-width margin-top-5"
+                                onclick="return confirm('Are you sure you want to delete the Star: @item.Name?');">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="starsDetailsModal" tabindex="-1" aria-labelledby="starsDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="starsDetailsModalLabel">Star</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        Name
+                    </dt>
+                    <dd class="col-sm-8">
+                        <span class="modal-name">
+                    </dd>
+                    <dt class="col-sm-4">
+                        Temperature
+                    </dt>
+                    <dd class="col-sm-8">
+                        <span class="modal-temperature">
+                    </dd>
+                    <dt class="col-sm-4">
+                        Brightness
+                    </dt>
+                    <dd class="col-sm-8">
+                        <span class="modal-brightness">
+                    </dd>
+                </dl>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+        
+        const starsDetailsModal = document.getElementById('starsDetailsModal')
+
+        starsDetailsModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const name = button.getAttribute('data-bs-name');
+            const temperature = button.getAttribute('data-bs-temperature');
+            const brightness = button.getAttribute('data-bs-brightness');
+            const modalName = starsDetailsModal.querySelector('.modal-name');
+            modalName.textContent = name;
+            const modalTemperature = starsDetailsModal.querySelector('.modal-temperature');
+            modalTemperature.textContent = temperature;
+            const modalBrightness = starsDetailsModal.querySelector('.modal-brightness');
+            modalBrightness.textContent = brightness;
+        })
+    </script>
 }
-    </tbody>
-</table>

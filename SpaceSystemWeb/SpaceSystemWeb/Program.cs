@@ -29,8 +29,8 @@ namespace SpaceSystemWeb
 
             builder.Services.AddScoped<IPlanetsService, PlanetsService>();
             builder.Services.AddScoped<IPlanetsRepository, PlanetsRepository>();
-            //builder.Services.AddScoped<IContactsService, ContactsService>();
-            //builder.Services.AddScoped<IContactsRepository, ContactsRepository>();
+            builder.Services.AddScoped<IStarsService, StarsService>();
+            builder.Services.AddScoped<IStarsRepository, StarsRepository>();
 
             var app = builder.Build();
 

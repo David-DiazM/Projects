@@ -42,5 +42,16 @@ namespace SpaceSystemWebServices
         {
             return await _planetsRepository.ExistsAsync(id);
         }
+
+        public async Task<List<Planet>> GetAllCustomerAsync()
+        {
+            var data = await _planetsRepository.GetAllAsync();
+            return data;
+        }
+
+        public async Task<Planet> GetCustomerAsync(int id)
+        {
+            return await _planetsRepository.GetAsync(id);
+        }
     }
 }

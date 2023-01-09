@@ -2,36 +2,36 @@
 using Microsoft.EntityFrameworkCore;
 using SpaceSystemWebData;
 using SpaceSystemWebModels;
+using SpaceSystemWebServices;
 
 namespace SpaceSystemWeb.Controllers
 {
     public class StarsController : Controller
     {
-        private readonly SpaceSystemWebDbContext _context;
+        //private readonly SpaceSystemWebDbContext _context;
+        private readonly IStarsService _starsService;
 
-        public StarsController(SpaceSystemWebDbContext context)
+        public StarsController(IStarsService starsService)
         {
-            _context = context;
+            _starsService = starsService;
         }
 
         // GET: Stars
         public async Task<IActionResult> Index()
         {
-              return _context.Stars != null ? 
-                          View(await _context.Stars.ToListAsync()) :
-                          Problem("Entity set 'SpaceSystemWebDbContext.Stars'  is null.");
+            var stars = await _starsService.GetAllAsync();
+            return View(stars);
         }
 
         // GET: Stars/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Stars == null)
+            if (id == null || await _starsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var star = await _context.Stars
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var star = await _starsService.GetAsync((int)id);
             if (star == null)
             {
                 return NotFound();
@@ -55,8 +55,7 @@ namespace SpaceSystemWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(star);
-                await _context.SaveChangesAsync();
+                await _starsService.AddOrUpdateAsync(star);
                 return RedirectToAction(nameof(Index));
             }
             return View(star);
@@ -65,12 +64,12 @@ namespace SpaceSystemWeb.Controllers
         // GET: Stars/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Stars == null)
+            if (id == null || await _starsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var star = await _context.Stars.FindAsync(id);
+            var star = await _starsService.GetAsync((int)id);
             if (star == null)
             {
                 return NotFound();
@@ -94,12 +93,11 @@ namespace SpaceSystemWeb.Controllers
             {
                 try
                 {
-                    _context.Update(star);
-                    await _context.SaveChangesAsync();
+                    await _starsService.AddOrUpdateAsync(star);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StarExists(star.Id))
+                    if (!await StarExists(star.Id))
                     {
                         return NotFound();
                     }
@@ -116,13 +114,12 @@ namespace SpaceSystemWeb.Controllers
         // GET: Stars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Stars == null)
+            if (id == null || await _starsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var star = await _context.Stars
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var star = await _starsService.GetAsync((int)id);
             if (star == null)
             {
                 return NotFound();
@@ -136,23 +133,23 @@ namespace SpaceSystemWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Stars == null)
+            if (await _starsService.GetAllAsync() == null)
             {
                 return Problem("Entity set 'SpaceSystemWebDbContext.Stars'  is null.");
             }
-            var star = await _context.Stars.FindAsync(id);
-            if (star != null)
-            {
-                _context.Stars.Remove(star);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _starsService.DeleteAsync(id);
+            //var star = await _starsService.GetAsync((int)id);
+            //if (star != null)
+            //{
+            //    await _starsService.DeleteAsync(id);
+            //}
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StarExists(int id)
+        private async Task<bool> StarExists(int id)
         {
-          return (_context.Stars?.Any(e => e.Id == id)).GetValueOrDefault();
+          return await _starsService.ExistsAsync(id);
         }
     }
 }
