@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpaceSystemWebModels\SpaceSystemWebModels.csproj" />
     <ProjectReference Include="..\SpaceSystemWebRepositories\SpaceSystemWebRepositories.csproj" />
   </ItemGroup>
 

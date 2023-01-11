@@ -11,6 +11,5 @@ namespace SpaceSystemWeb.Data
         {
 
         }
-        public DbSet<SpaceSystemWeb.Models.Employee> Employee { get; set; } = default!;
     }
 }
