@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SpaceSystemWeb.Data;
 using SpaceSystemWebData;
+using SpaceSystemWebRepositories;
+using SpaceSystemWebServices;
 
 namespace SpaceSystemWeb
 {
@@ -24,6 +26,11 @@ namespace SpaceSystemWeb
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IPlanetsService, PlanetsService>();
+            builder.Services.AddScoped<IPlanetsRepository, PlanetsRepository>();
+            builder.Services.AddScoped<IStarsService, StarsService>();
+            builder.Services.AddScoped<IStarsRepository, StarsRepository>();
 
             var app = builder.Build();
 

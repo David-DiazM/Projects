@@ -20,20 +20,3 @@ html {
 body {
   margin-bottom: 60px;
 }
-
-.active-link {
-    font-weight: bold;
-    background-color: #c3c3c3;
-}
-
-.button-default-width {
-    width: 225px;
-}
-
-.button-default-sm-width {
-    width: 75px;
-}
-
-.margin-top-5 {
-    margin-top: 5px;
-}

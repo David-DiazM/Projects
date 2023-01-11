@@ -1,42 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SpaceSystemWebData;
 using SpaceSystemWebModels;
+using SpaceSystemWebServices;
 
 namespace SpaceSystemWeb.Controllers
 {
     public class PlanetsController : Controller
     {
-        private readonly SpaceSystemWebDbContext _context;
+        //private readonly SpaceSystemWebDbContext _context;
+        private readonly IPlanetsService _planetsService;
 
-        public PlanetsController(SpaceSystemWebDbContext context)
+        public PlanetsController(IPlanetsService planetsService)
         {
-            _context = context;
+            _planetsService = planetsService;
         }
 
         // GET: Planets
         public async Task<IActionResult> Index()
         {
-              return _context.Planets != null ? 
-                          View(await _context.Planets.ToListAsync()) :
-                          Problem("Entity set 'SpaceSystemWebDbContext.Planets'  is null.");
+            var planets = await _planetsService.GetAllAsync();
+            return View(planets);
         }
 
         // GET: Planets/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Planets == null)
+            if (id == null || _planetsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var planet = await _context.Planets
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var planet = await _planetsService.GetAsync((int)id);
             if (planet == null)
             {
                 return NotFound();
@@ -60,8 +54,7 @@ namespace SpaceSystemWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(planet);
-                await _context.SaveChangesAsync();
+                await _planetsService.AddOrUpdateAsync(planet);
                 return RedirectToAction(nameof(Index));
             }
             return View(planet);
@@ -70,12 +63,12 @@ namespace SpaceSystemWeb.Controllers
         // GET: Planets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Planets == null)
+            if (id == null || await _planetsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var planet = await _context.Planets.FindAsync(id);
+            var planet = await _planetsService.GetAsync((int)id);
             if (planet == null)
             {
                 return NotFound();
@@ -99,12 +92,11 @@ namespace SpaceSystemWeb.Controllers
             {
                 try
                 {
-                    _context.Update(planet);
-                    await _context.SaveChangesAsync();
+                    await _planetsService.AddOrUpdateAsync(planet);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlanetExists(planet.Id))
+                    if (!await PlanetExists(planet.Id))
                     {
                         return NotFound();
                     }
@@ -121,13 +113,12 @@ namespace SpaceSystemWeb.Controllers
         // GET: Planets/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Planets == null)
+            if (id == null || await _planetsService.GetAllAsync() == null)
             {
                 return NotFound();
             }
 
-            var planet = await _context.Planets
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var planet = await _planetsService.GetAsync((int)id);
             if (planet == null)
             {
                 return NotFound();
@@ -141,23 +132,26 @@ namespace SpaceSystemWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Planets == null)
+            if (await _planetsService.GetAllAsync() == null)
             {
                 return Problem("Entity set 'SpaceSystemWebDbContext.Planets'  is null.");
             }
-            var planet = await _context.Planets.FindAsync(id);
-            if (planet != null)
-            {
-                _context.Planets.Remove(planet);
-            }
-            
-            await _context.SaveChangesAsync();
+            await _planetsService.DeleteAsync(id);
+            //var planet = await _planetsService.GetAsync((int)id);
+            //if (planet != null)
+            //{
+            //   await _planetsService.DeleteAsync(id);
+            //}
+
+            //await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PlanetExists(int id)
+        private async Task<bool> PlanetExists(int id)
         {
-          return (_context.Planets?.Any(e => e.Id == id)).GetValueOrDefault();
+          return await _planetsService.ExistsAsync(id);
         }
     }
 }

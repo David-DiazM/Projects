@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWeb", "SpaceSyst
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWebData", "SpaceSystemWebData\SpaceSystemWebData.csproj", "{EA3D7C70-B695-4E5C-BB5A-7045EF76B323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceSystemWebModels", "SpaceSystemWebModels\SpaceSystemWebModels.csproj", "{16713094-C3FE-4C0B-A6D1-67C0D7E05DF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWebModels", "SpaceSystemWebModels\SpaceSystemWebModels.csproj", "{16713094-C3FE-4C0B-A6D1-67C0D7E05DF4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWebRepositories", "SpaceSystemWebRepositories\SpaceSystemWebRepositories.csproj", "{7EA3FA9A-2AC1-434A-998F-1F82F604D355}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceSystemWebServices", "SpaceSystemWebServices\SpaceSystemWebServices.csproj", "{E852D69D-3151-4A96-818C-DBC00CE52174}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{16713094-C3FE-4C0B-A6D1-67C0D7E05DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16713094-C3FE-4C0B-A6D1-67C0D7E05DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16713094-C3FE-4C0B-A6D1-67C0D7E05DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EA3FA9A-2AC1-434A-998F-1F82F604D355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EA3FA9A-2AC1-434A-998F-1F82F604D355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EA3FA9A-2AC1-434A-998F-1F82F604D355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EA3FA9A-2AC1-434A-998F-1F82F604D355}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E852D69D-3151-4A96-818C-DBC00CE52174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E852D69D-3151-4A96-818C-DBC00CE52174}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E852D69D-3151-4A96-818C-DBC00CE52174}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E852D69D-3151-4A96-818C-DBC00CE52174}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

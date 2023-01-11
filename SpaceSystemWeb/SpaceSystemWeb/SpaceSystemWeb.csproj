@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpaceSystemWebData\SpaceSystemWebData.csproj" />
+    <ProjectReference Include="..\SpaceSystemWebServices\SpaceSystemWebServices.csproj" />
   </ItemGroup>
 
 </Project>
