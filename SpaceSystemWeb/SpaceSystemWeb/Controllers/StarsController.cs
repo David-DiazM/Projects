@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SpaceSystemWebData;
 using SpaceSystemWebModels;
@@ -40,6 +41,7 @@ namespace SpaceSystemWeb.Controllers
             return View(star);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Stars/Create
         public IActionResult Create()
         {
@@ -61,6 +63,7 @@ namespace SpaceSystemWeb.Controllers
             return View(star);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Stars/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -111,6 +114,7 @@ namespace SpaceSystemWeb.Controllers
             return View(star);
         }
 
+        [Authorize(Roles = "Admin")]
         // GET: Stars/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,6 +132,7 @@ namespace SpaceSystemWeb.Controllers
             return View(star);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Stars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

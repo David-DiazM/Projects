@@ -24,6 +24,7 @@ namespace SpaceSystemWeb
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -31,6 +32,7 @@ namespace SpaceSystemWeb
             builder.Services.AddScoped<IPlanetsRepository, PlanetsRepository>();
             builder.Services.AddScoped<IStarsService, StarsService>();
             builder.Services.AddScoped<IStarsRepository, StarsRepository>();
+            builder.Services.AddScoped<IUserRolesService, UserRolesService>();
 
             var app = builder.Build();
 
