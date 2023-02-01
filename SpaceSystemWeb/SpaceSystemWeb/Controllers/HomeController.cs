@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SpaceSystemWeb.Data;
 using SpaceSystemWeb.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace SpaceSystemWeb.Controllers
 {
@@ -32,9 +35,16 @@ namespace SpaceSystemWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        protected async Task<string> GetCurrentUserEmail()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            return email;
+        }
+
         public async Task<IActionResult> EnsureRolesAndUsers()
         {
-            await _userRolesService.EnsureAdminUserRole();
+            var email = GetCurrentUserEmail().Result;
+            await _userRolesService.EnsureAdminUserRole(email);
             return RedirectToAction("Index");
         }
     }

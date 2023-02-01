@@ -7,8 +7,9 @@ namespace SpaceSystemWeb.Data
     public class UserRolesService : IUserRolesService
     {
         public const string ADMIN_ROLE_NAME = "Admin";
-        private const string ADMIN_USER_EMAIL = "secret";
-        private const string ADMIN_USER_PWD = "secret";
+        public string ADMIN_USER_EMAIL;
+        private const string EMAIL_PATTERN = "@spacesystem.com";
+        private const string ADMIN_USER_PWD = "Password1!";
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public UserRolesService(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -33,6 +34,11 @@ namespace SpaceSystemWeb.Data
 
         private async Task EnsureUsers()
         {
+            if(!ADMIN_USER_EMAIL.Contains(EMAIL_PATTERN))
+            {
+                throw new InvalidOperationException("Cannot add  null user/role combination");
+            }
+
             var existingAdminUser = await _userManager.FindByEmailAsync(ADMIN_USER_EMAIL);
             if (existingAdminUser is null)
             {
@@ -50,8 +56,10 @@ namespace SpaceSystemWeb.Data
             }
         }
 
-        public async Task EnsureAdminUserRole()
+        public async Task EnsureAdminUserRole(string email)
         {
+            ADMIN_USER_EMAIL = email;
+
             //ensure roles
             await EnsureRoles();
 

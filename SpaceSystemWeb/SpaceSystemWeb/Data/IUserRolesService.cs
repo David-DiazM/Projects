@@ -2,6 +2,6 @@ namespace SpaceSystemWeb.Data
 {
     public interface IUserRolesService
     {
-        Task EnsureAdminUserRole();
+        Task EnsureAdminUserRole(string email);
     }
 }
